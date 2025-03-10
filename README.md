@@ -1,12 +1,62 @@
-# React + Vite
+# Sambar - Project Management & Execution Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Dashboard Preview](screenshot`.png)
 
-Currently, two official plugins are available:
+## Overview
+Sambar is a desktop application designed for end users to add and manage projects, as well as run any React-based application seamlessly. It provides system and server logs to monitor performance and errors in real time.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This application is built using **Electron** and **React**, offering a smooth UI and efficient resource handling.
 
-## Expanding the ESLint configuration
+## Features
+- **Project Management**: Add, organize, and manage React applications.
+- **Execution**: Run any React-based application with ease.
+- **System Logs**: View CPU usage, RAM consumption, IP address, and internet speed in real time.
+- **Server Logs**: Track requests, endpoints, methods, and errors for debugging.
+- **User-Friendly UI**: Clean and visually appealing dashboard for monitoring and execution.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+- **Electron**: For building cross-platform desktop applications.
+- **React.js**: Frontend framework for a dynamic user interface.
+- **Tailwind CSS**: For styling and UI enhancements.
+- **Node.js**: Backend logic handling.
+
+## Installation
+### Prerequisites
+Ensure you have the following installed:
+- [Node.js](https://nodejs.org/)
+- [Git](https://git-scm.com/)
+
+### Steps
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Yuslash/Sambar.git
+   cd Sambar
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the Electron app:
+   ```sh
+   npm run dev
+   ```
+
+## Usage
+1. Open the application.
+2. Add your React projects via the dashboard.
+3. Start and monitor the applications.
+4. View system and server logs for performance insights.
+
+## Contribution
+If you want to contribute:
+1. Fork the repository.
+2. Create a new branch.
+3. Commit your changes.
+4. Create a pull request.
+
+## License
+This project is licensed under the MIT License.
+
+---
+Feel free to customize this README further based on your exact requirements!
+
