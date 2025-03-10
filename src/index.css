@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+.server-control-background {
+    background: linear-gradient(315deg, #110E26 -0.01%, #0F0D25 28.52%, #171A3F 54.07%, #16193E 68.12%, #121128 81.51%, #121128 100%);
+}
+
+.sambar-text {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.side-panel-text {
+    color: #635DDC;
+    text-align: center;
+    font-family: Jost;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.system-logs-text {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.server-log-text {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal; 
+}
+
+.system-logs-panel {
+    flex-grow: 1;
+    background: rgba(13, 0, 39, 0.44);
+    border:1px solid #293451;
+}
+
+
+.panel-title {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.cpu-percentage {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 52px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.cpu-symbol-percentage {
+    color: #60627E;
+    font-family: Jost;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.health-checker {
+    border-radius: 100px;
+    background: rgba(44, 146, 24, 0.08);
+}
+
+.ip-address-number {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.net-speed {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.server-log-main-panel {
+
+    background-color: #0d00278c;
+    height: 100%;
+
+}
+
+.recent-log {
+    color: #FFF;
+    font-family: Jost;
+    font-size: 34px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+@media (max-width: 1830px) {
+.system-logs-panel {
+    flex-grow: 0;
+}
+
+.main-top-panel {
+    justify-content: center;
+}
+
+}
+
+@media (max-height: 800px) {
+      .panels-holder {
+        margin: 50px !important;
+      }          
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(140, 139, 164, 0.6);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(140, 139, 164, 0.8);
+}
+
