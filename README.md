@@ -1,6 +1,6 @@
 # Sambar - Project Management & Execution Dashboard
 
-![Dashboard Preview](screenshot.png)
+![Dashboard Preview](/public/screenshot.png)
 
 ## Overview
 Sambar is a desktop application designed for end users to add and manage projects, as well as run any React-based application seamlessly. It provides system and server logs to monitor performance and errors in real time.
