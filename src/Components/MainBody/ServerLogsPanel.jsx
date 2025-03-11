@@ -1,77 +1,39 @@
+import { useEffect, useState, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+
 export default function ServerLogsPanel() {
-    const logs = [
-        {
-            ip: "192.168.195.219",
-            time: "2 Minutes Ago",
-            method: "POST",
-            endpoint: "/auth/login",
-            message: "Login Successfully...",
-            statusCode: 200,
-            status: "Success",
-            statusColor: "green-500"
-        },
-        {
-            ip: "192.168.195.220",
-            time: "5 Minutes Ago",
-            method: "POST",
-            endpoint: "/auth/login",
-            message: "Login Failed: Invalid credentials",
-            statusCode: 500,
-            status: "Failed",
-            statusColor: "yellow-500"
-        },
-        {
-            ip: "192.168.195.221",
-            time: "10 Minutes Ago",
-            method: "GET",
-            endpoint: "/user/profile",
-            message: "Internal Server Error",
-            statusCode: 500,
-            status: "Error",
-            statusColor: "red-500"
-        },{
-            ip: "192.168.195.221",
-            time: "10 Minutes Ago",
-            method: "GET",
-            endpoint: "/user/profile",
-            message: "Internal Server Error",
-            statusCode: 500,
-            status: "Error",
-            statusColor: "red-500"
-        },{
-            ip: "192.168.195.221",
-            time: "10 Minutes Ago",
-            method: "GET",
-            endpoint: "/user/profile",
-            message: "Internal Server Error",
-            statusCode: 500,
-            status: "Error",
-            statusColor: "red-500"
-        },{
-            ip: "192.168.195.221",
-            time: "10 Minutes Ago",
-            method: "GET",
-            endpoint: "/user/profile",
-            message: "Internal Server Error",
-            statusCode: 500,
-            status: "Error",
-            statusColor: "red-500"
-        },
-        {
-            ip: "192.168.195.221",
-            time: "10 Minutes Ago",
-            method: "GET",
-            endpoint: "/user/profile",
-            message: "Internal Server Error",
-            statusCode: 500,
-            status: "Error",
-            statusColor: "red-500"
-        },
-    ];
+    const [logs, setLogs] = useState([])
+    const latestLogRef = useRef(null)
+
+    useEffect(() => {
+        fetch("http://localhost:5000/logs")
+            .then((res) => res.json())
+            .then((data) => setLogs(data))
+
+        const ws = new WebSocket("ws://localhost:8765")
+
+        ws.onmessage = (event) => {
+            const { type, data } = JSON.parse(event.data)
+
+            if (type === "RECENT_LOGS") {
+                setLogs(data)
+            } else if (type === "NEW_LOG") {
+                setLogs((prev) => [data, ...prev])
+            }
+        }
+
+        return () => ws.close()
+    }, [])
+
+    useEffect(() => {
+        if (latestLogRef.current) {
+            latestLogRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+    }, [logs])
 
     return (
         <div className="server-log-main-panel pt-[65px] px-[55px] rounded-lg border border-[#293451]">
-            <h1 className="recent-log pb-5  text-[20px] text-[#8C8BA4] font-[500] font-[Jost]">
+            <h1 className="recent-log pb-5 text-[20px] text-[#8C8BA4] font-[500] font-[Jost]">
                 Recent Logs
             </h1>
             <div className="custom-scrollbar relative max-h-[440px] overflow-auto">
@@ -88,24 +50,34 @@ export default function ServerLogsPanel() {
                         </tr>
                     </thead>
                     <tbody className="bg-[rgba(0,0,0,0.14)]">
-                        {logs.map((log, index) => (
-                            <tr key={index} className="border-b border-[#293451] text-[#FFF] text-[14px] font-[500] font-[Jost]">
-                                <td className="px-6 py-4">{log.ip}</td>
-                                <td className="px-6 py-4">{log.time}</td>
-                                <td className="px-6 py-4">{log.method}</td>
-                                <td className="px-6 py-4">{log.endpoint}</td>
-                                <td className="px-6 py-4 text-nowrap overflow-hidden">{log.message}</td>
-                                <td className={`px-6 py-4 text-center text-${log.statusColor}`}>{log.statusCode}</td>
-                                <td className="px-6 py-4">
-                                    <div className={`border py-1 rounded-full text-center text-sm border-${log.statusColor} bg-${log.statusColor}/20 text-${log.statusColor}`}>
-                                        {log.status}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                        <AnimatePresence>
+                            {logs.map((log, index) => (
+                                <motion.tr
+                                    key={log.id || index}
+                                    ref={index === 0 ? latestLogRef : null} // Assign ref to the latest log
+                                    initial={{ opacity: 0, x: 550 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -550 }}
+                                    transition={{ duration: 0.4, ease: "easeOut" }}
+                                    className="border-b border-[#293451] text-[#FFF] text-[14px] font-[500] font-[Jost]"
+                                >
+                                    <td className="px-6 py-4">{log.ip}</td>
+                                    <td className="px-6 py-4">{log.time}</td>
+                                    <td className="px-6 py-4">{log.method}</td>
+                                    <td className="px-6 py-4">{log.endpoint}</td>
+                                    <td className="px-6 py-4 text-nowrap overflow-hidden">{log.message}</td>
+                                    <td className={`px-6 py-4 text-center text-${log.statusColor}`}>{log.statusCode}</td>
+                                    <td className=" py-4 flex items-center justify-center">
+                                        <div className={`border py-2 px-4 rounded-full text-center text-sm border-${log.statusColor} bg-${log.statusColor}/20 text-${log.statusColor}`}>
+                                            {log.status}
+                                        </div>
+                                    </td>
+                                </motion.tr>
+                            ))}
+                        </AnimatePresence>
                     </tbody>
                 </table>
             </div>
         </div>
-    );
+    )
 }
