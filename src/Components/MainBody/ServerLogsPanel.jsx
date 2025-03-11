@@ -8,17 +8,22 @@ export default function ServerLogsPanel() {
     useEffect(() => {
         fetch("http://localhost:5000/logs")
             .then((res) => res.json())
-            .then((data) => setLogs(data))
+            .then((data) => {
+                // Reverse initial logs to show oldest first
+                setLogs(data.logs.reverse())
+            })
 
         const ws = new WebSocket("ws://localhost:8765")
 
         ws.onmessage = (event) => {
             const { type, data } = JSON.parse(event.data)
-
+        
             if (type === "RECENT_LOGS") {
-                setLogs(data)
+                // Reverse initial batch to maintain chronological order
+                setLogs(data.reverse())
             } else if (type === "NEW_LOG") {
-                setLogs((prev) => [data, ...prev])
+                // Add new logs to the end of the array
+                setLogs((prev) => [...prev, data])
             }
         }
 
@@ -27,7 +32,7 @@ export default function ServerLogsPanel() {
 
     useEffect(() => {
         if (latestLogRef.current) {
-            latestLogRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+            latestLogRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
         }
     }, [logs])
 
@@ -50,30 +55,33 @@ export default function ServerLogsPanel() {
                         </tr>
                     </thead>
                     <tbody className="bg-[rgba(0,0,0,0.14)]">
-                        <AnimatePresence>
-                            {logs.map((log, index) => (
-                                <motion.tr
-                                    key={log.id || index}
-                                    ref={index === 0 ? latestLogRef : null} // Assign ref to the latest log
-                                    initial={{ opacity: 0, x: 550 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -550 }}
-                                    transition={{ duration: 0.4, ease: "easeOut" }}
-                                    className="border-b border-[#293451] text-[#FFF] text-[14px] font-[500] font-[Jost]"
-                                >
-                                    <td className="px-6 py-4">{log.ip}</td>
-                                    <td className="px-6 py-4">{log.time}</td>
-                                    <td className="px-6 py-4">{log.method}</td>
-                                    <td className="px-6 py-4">{log.endpoint}</td>
-                                    <td className="px-6 py-4 text-nowrap overflow-hidden">{log.message}</td>
-                                    <td className={`px-6 py-4 text-center text-${log.statusColor}`}>{log.statusCode}</td>
-                                    <td className=" py-4 flex items-center justify-center">
-                                        <div className={`border py-2 px-4 rounded-full text-center text-sm border-${log.statusColor} bg-${log.statusColor}/20 text-${log.statusColor}`}>
-                                            {log.status}
-                                        </div>
-                                    </td>
-                                </motion.tr>
-                            ))}
+                        <AnimatePresence initial={false}>
+                            {logs.map((log, index) => {
+                                const isNewest = index === logs.length - 1
+                                return (
+                                    <motion.tr
+                                        key={log.id || index}
+                                        ref={isNewest ? latestLogRef : null}
+                                        initial={isNewest ? { opacity: 0, x: 550 } : {}}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -550 }}
+                                        transition={{ duration: 0.4, ease: "easeOut" }}
+                                        className="border-b border-[#293451] text-[#FFF] text-[14px] font-[500] font-[Jost]"
+                                    >
+                                        <td className="px-6 py-4">{log.ip}</td>
+                                        <td className="px-6 py-4">{log.time}</td>
+                                        <td className="px-6 py-4">{log.method}</td>
+                                        <td className="px-6 py-4">{log.endpoint}</td>
+                                        <td className="px-6 py-4 text-nowrap overflow-hidden">{log.message}</td>
+                                        <td className={`px-6 py-4 text-center text-${log.statusColor}`}>{log.statusCode}</td>
+                                        <td className="py-4 flex items-center justify-center">
+                                            <div className={`border py-2 px-4 rounded-full text-center text-sm border-${log.statusColor} bg-${log.statusColor}/20 text-${log.statusColor}`}>
+                                                {log.status}
+                                            </div>
+                                        </td>
+                                    </motion.tr>
+                                )
+                            })}
                         </AnimatePresence>
                     </tbody>
                 </table>
