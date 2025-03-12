@@ -62,9 +62,9 @@ export default function ServerLogsPanel() {
                                     <motion.tr
                                         key={log.id || index}
                                         ref={isNewest ? latestLogRef : null}
-                                        initial={isNewest ? { opacity: 0, x: 550 } : {}}
+                                        initial={isNewest ? { opacity: 0, x: -1000 } : {}}
                                         animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -550 }}
+                                        exit={{ opacity: 0, x: 550 }}
                                         transition={{ duration: 0.4, ease: "easeOut" }}
                                         className="border-b border-[#293451] text-[#FFF] text-[14px] font-[500] font-[Jost]"
                                     >
