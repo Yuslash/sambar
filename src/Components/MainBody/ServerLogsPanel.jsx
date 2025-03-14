@@ -37,7 +37,13 @@ export default function ServerLogsPanel() {
     }, [logs])
 
     return (
-        <div className="server-log-main-panel pt-[65px] px-[55px] rounded-lg border border-[#293451]">
+        <div className="server-log-main-panel pt-[25px] px-[55px] rounded-lg border border-[#293451]">
+
+            <div className="logs-panels-buttons-wrapper mt-2 space-x-3 flex justify-end items-center">
+                <button className="bg-purple-500 border border-purple-400 font-[jost] shadow-lg hover:bg-purple-600 cursor-pointer text-yellow-50 px-4 py-2.5 rounded-lg">Refresh</button>
+                <button className="bg-indigo-500 border border-indigo-400 font-[jost] shadow-lg hover:bg-indigo-600 cursor-pointer text-indigo-50 px-4 py-2.5 rounded-lg">Start Log Streaming</button>
+            </div>
+
             <h1 className="recent-log pb-5 text-[20px] text-[#8C8BA4] font-[500] font-[Jost]">
                 Recent Logs
             </h1>
