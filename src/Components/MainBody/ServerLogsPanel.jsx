@@ -82,12 +82,14 @@ export default function ServerLogsPanel() {
 
     return (
         <div className="server-log-main-panel pt-[25px] px-[55px] rounded-lg border border-[#293451]">
-            <div className="logs-panels-buttons-wrapper mt-2 space-x-3 flex justify-end items-center">
-                <button onClick={fetchLogs} className="bg-purple-500 border border-purple-400 font-[jost] shadow-lg hover:bg-purple-600 cursor-pointer text-yellow-50 px-4 py-2.5 rounded-lg">
-                    Refresh
+            <div className="logs-panels-buttons-wrapper mt-2 space-x-3 flex justify-end items-center text-white">
+                <button onClick={fetchLogs} className="flex items-center justify-center space-x-2 bg-purple-600  font-[jost] shadow-lg hover:bg-purple-700 cursor-pointer px-4 py-2.5 rounded-lg">
+                    <img className="w-5 h-5 object-cover" src="/refresh-cw-alt-1-svgrepo-com.svg" />
+                    <span>Refresh</span>
                 </button>
-                <button className="bg-indigo-500 border border-indigo-400 font-[jost] shadow-lg hover:bg-indigo-600 cursor-pointer text-indigo-50 px-4 py-2.5 rounded-lg">
-                    Start Log Streaming
+                <button className="bg-indigo-600 flex items-center justify-center object-cover font-[jost] space-x-2 shadow-lg hover:bg-indigo-700 cursor-pointer px-4 py-2.5 rounded-lg">
+                    <img className="w-6 h-6 object-cover" src="/live-svgrepo-com.svg" />
+                    <span>Start Log Streaming</span>
                 </button>
             </div>
 

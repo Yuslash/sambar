@@ -44,14 +44,18 @@ ipcMain.handle('get-ram-usage', async () => {
 
 ipcMain.handle('get-ip-address', async () => {
   const nets = os.networkInterfaces()
+  let selectedIP = 'Unknown'
+
   for (const name of Object.keys(nets)) {
     for (const net of nets[name]) {
-      if (!net.internal && net.family === 'IPv4') {
-        return net.address
+      if (!net.internal && net.family === 'IPv4' && net.netmask !== '255.255.255.255') {
+        if (net.gateway) return net.address // Prefer interfaces with a gateway
+        selectedIP = net.address // Fallback to any non-internal IPv4
       }
     }
   }
-  return 'Unknown'
+  return selectedIP
 })
+
 
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit() })
