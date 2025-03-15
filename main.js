@@ -21,7 +21,7 @@ app.whenReady().then(() => {
 
   mainWindow.maximize()
   Menu.setApplicationMenu(null)
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools() 
 
   const devServerUrl = 'http://localhost:5173'
   if (process.env.NODE_ENV === 'development') {

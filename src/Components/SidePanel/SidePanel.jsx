@@ -8,7 +8,7 @@ export default function SidePanel() {
     };
 
     return (
-        <div className={`h-full ${isCollapsed ? 'w-[100px]' : 'min-w-[310px]'} py-20 flex flex-col justify-start items-center bg-black/10 mr-6 max-xl:hidden`}>
+        <div className={`h-full transition-all duration-300 ${isCollapsed ? 'w-[100px]' : 'w-[310px]'} py-20 flex flex-col justify-start items-center bg-black/10 mr-6 max-xl:hidden`}>
             <div className="flex gap-2 items-center ">
                 <img className={`cursor-pointer  shadow-lg transition-transform duration-600 ${isCollapsed ? 'rotate-360 bg-white rounded-lg p-1.5': ''}`} onClick={handleCollapsed} src="/side_panels/Kakrol.svg" />
                 {!isCollapsed && <span className="sambar-text">Sambar</span>}
