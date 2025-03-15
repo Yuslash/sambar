@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from "framer-motion"
 
 export default function ServerLogsPanel() {
     const [logs, setLogs] = useState([])
+    const [isStreaming, setIsStreaming] = useState(false) // Track WebSocket state
     const latestLogRef = useRef(null)
-    const wsRef = useRef(null) // Store WebSocket reference
+    const wsRef = useRef(null)
 
-    // Function to calculate time ago
     const timeAgo = (timestamp) => {
         const now = new Date()
         const past = new Date(timestamp)
@@ -18,14 +18,13 @@ export default function ServerLogsPanel() {
         return `${Math.floor(diffInSeconds / 86400)} days ago`
     }
 
-    // Function to fetch logs
     const fetchLogs = async () => {
         const res = await fetch("http://localhost:5000/logs")
         const data = await res.json()
 
         setLogs(
             data.logs
-                .filter(log => log.endpoint !== "/logs") // Exclude /logs requests
+                .filter(log => log.endpoint !== "/logs")
                 .reverse()
                 .map(log => ({
                     ...log,
@@ -36,6 +35,14 @@ export default function ServerLogsPanel() {
 
     useEffect(() => {
         fetchLogs()
+    }, [])
+
+    // WebSocket Connection Management
+    const startStreaming = () => {
+
+        fetchLogs()
+
+        if (wsRef.current) return
 
         wsRef.current = new WebSocket("ws://localhost:8765")
 
@@ -45,7 +52,7 @@ export default function ServerLogsPanel() {
             if (type === "RECENT_LOGS") {
                 setLogs(
                     data
-                        .filter(log => log.endpoint !== "/logs") // Exclude /logs requests
+                        .filter(log => log.endpoint !== "/logs")
                         .reverse()
                         .map(log => ({
                             ...log,
@@ -59,10 +66,27 @@ export default function ServerLogsPanel() {
             }
         }
 
-        return () => wsRef.current?.close()
-    }, [])
+        wsRef.current.onclose = () => {
+            console.log("WebSocket Disconnected")
+            wsRef.current = null
+            setIsStreaming(false)
+        }
 
-    // Periodically update relative times every minute
+        setIsStreaming(true)
+    }
+
+    const stopStreaming = () => {
+
+        fetchLogs()
+
+        if (wsRef.current) {
+            wsRef.current.close()
+            wsRef.current = null
+        }
+        setIsStreaming(false)
+    }
+
+    // Periodically update relative times
     useEffect(() => {
         const interval = setInterval(() => {
             setLogs(prevLogs => prevLogs.map(log => ({
@@ -83,13 +107,18 @@ export default function ServerLogsPanel() {
     return (
         <div className="server-log-main-panel pt-[25px] px-[55px] rounded-lg border border-[#293451]">
             <div className="logs-panels-buttons-wrapper mt-2 space-x-3 flex justify-end items-center text-white">
-                <button onClick={fetchLogs} className="flex items-center justify-center space-x-2 bg-purple-600  font-[jost] shadow-lg hover:bg-purple-700 cursor-pointer px-4 py-2.5 rounded-lg">
+                <button onClick={fetchLogs} className="flex items-center justify-center space-x-2 bg-purple-600 font-[jost] shadow-lg hover:bg-purple-700 cursor-pointer px-4 py-2.5 rounded-lg">
                     <img className="w-5 h-5 object-cover" src="/refresh-cw-alt-1-svgrepo-com.svg" />
                     <span>Refresh</span>
                 </button>
-                <button className="bg-indigo-600 flex items-center justify-center object-cover font-[jost] space-x-2 shadow-lg hover:bg-indigo-700 cursor-pointer px-4 py-2.5 rounded-lg">
+                <button
+                    onClick={isStreaming ? stopStreaming : startStreaming}
+                    className={`flex items-center justify-center object-cover font-[jost] space-x-2 shadow-lg cursor-pointer px-4 py-2.5 rounded-lg ${
+                        isStreaming ? "bg-red-600 hover:bg-red-700" : "bg-indigo-600 hover:bg-indigo-700"
+                    }`}
+                >
                     <img className="w-6 h-6 object-cover" src="/live-svgrepo-com.svg" />
-                    <span>Start Log Streaming</span>
+                    <span>{isStreaming ? "Stop Log Streaming" : "Start Log Streaming"}</span>
                 </button>
             </div>
 
