@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import LogStreamWarningModal from "../Modals/LogStreamWarningModal.jsx"
 
 export default function ServerLogsPanel() {
     const [logs, setLogs] = useState([])
     const [isStreaming, setIsStreaming] = useState(false) // Track WebSocket state
     const latestLogRef = useRef(null)
     const wsRef = useRef(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const timeAgo = (timestamp) => {
         const now = new Date()
@@ -86,6 +88,27 @@ export default function ServerLogsPanel() {
         setIsStreaming(false)
     }
 
+    //handle the modal logic before streaming
+    const startStreamingWithCheck = () => {
+
+        const skipWarning = localStorage.getItem("skipLogStreamWarning") === "true"
+        if(skipWarning) {
+            startStreaming()
+        } else {
+            setIsModalOpen(true)
+        }
+
+    }
+
+    const handleConfirmStreaming = (dontAskAgain) => {
+        if(dontAskAgain) {
+            localStorage.setItem("skipLogStreamWarning", "true")
+        }
+
+        setIsModalOpen(false)
+        startStreaming()
+    }
+
     // Periodically update relative times
     useEffect(() => {
         const interval = setInterval(() => {
@@ -107,14 +130,14 @@ export default function ServerLogsPanel() {
     return (
         <div className="server-log-main-panel pt-[25px] px-[55px] rounded-lg border border-[#293451]">
             <div className="logs-panels-buttons-wrapper mt-2 space-x-3 flex justify-end items-center text-white">
-                <button onClick={fetchLogs} className="flex items-center justify-center space-x-2 bg-purple-600 font-[jost] shadow-lg hover:bg-purple-700 cursor-pointer px-4 py-2.5 rounded-lg">
+                <button onClick={fetchLogs} className="flex items-center justify-center space-x-2  bg-purple-600/20 border border-purple-400/30 font-[jost] shadow-lg hover:bg-purple-700/20 cursor-pointer px-4 py-2.5 rounded-lg">
                     <img className="w-5 h-5 object-cover" src="/refresh-cw-alt-1-svgrepo-com.svg" />
                     <span>Refresh</span>
                 </button>
                 <button
-                    onClick={isStreaming ? stopStreaming : startStreaming}
+                    onClick={isStreaming ? stopStreaming : startStreamingWithCheck}
                     className={`flex items-center justify-center object-cover font-[jost] space-x-2 shadow-lg cursor-pointer px-4 py-2.5 rounded-lg ${
-                        isStreaming ? "bg-red-600 hover:bg-red-700" : "bg-indigo-600 hover:bg-indigo-700"
+                        isStreaming ? "bg-red-600/50 border border-red-400/30 hover:bg-red-700/50" : "bg-indigo-600/20 border border-indigo-400/30 hover:bg-indigo-700/20"
                     }`}
                 >
                     <img className="w-6 h-6 object-cover" src="/live-svgrepo-com.svg" />
@@ -172,6 +195,13 @@ export default function ServerLogsPanel() {
                     </tbody>
                 </table>
             </div>
+
+            <LogStreamWarningModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleConfirmStreaming}
+            />
+
         </div>
     )
 }
