@@ -11,7 +11,7 @@ export default function MainPanel() {
             <div className="all-main-panel flex-grow h-full flex flex-col gap-10 pl-2 pt-20 pr-[70px] overflow-auto max-xl:p-4">
                 <div className="system-logs-text">System Logs</div>
 
-                <div className="main-top-panel flex flex-wrap gap-10  transition-all duration-500 ease-in-out">
+                <div className="main-top-panel flex flex-wrap gap-10 transition-all duration-500 ease-in-out">
                     <CpuUsage />
                     <GpuUsage />
                     <IpPanel />

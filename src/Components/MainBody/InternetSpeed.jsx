@@ -28,7 +28,7 @@ export default function InternetSpeed() {
     }
 
     return (
-        <div className="system-logs-panel min-w-[331px] max-w-[331px] min-h-[183px] max-h-[183px] flex flex-col justify-center rounded-lg p-8 gap-7">
+        <div className="system-logs-panel min-w-[331px] min-h-[183px] max-h-[183px] flex flex-col justify-center rounded-lg p-8 gap-7">
             <div className="flex gap-3.5 items-center ">
                 <img className="w-8 h-8 object-cover" src="/high-speed-train-svgrepo-com.svg" />
                 <span className="panel-title">Internet Speed</span>

@@ -122,10 +122,31 @@
 }
 
 .main-top-panel {
+    padding-left: 300px;
+    padding-right: 300px;
     justify-content: center;
 }
 
 }
+
+@media (max-width: 1510px) {
+
+    .main-top-panel {
+        padding-left: 160px;
+        padding-right: 160px;
+        justify-content: center;
+    }
+
+}
+
+@media (max-width: 1060px) {
+
+    .main-top-panel {
+        justify-content: center;
+    }
+
+}
+
 
 @media (max-height: 800px) {
       .panels-holder {
