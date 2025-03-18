@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export default function DiscussionPanel() {
     return (
             <div 
-            className="p-6 w-full text-white bg-indigo-500"
+            className="p-6 w-full text-white "
             >
             <motion.div 
             initial={{ opacity: 0, x: 20 }} 

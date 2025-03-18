@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function AdvancePanel() {
     return (
-        <div className="p-6 text-white bg-indigo-500">
+        <div className="p-6 w-full text-white">
             <motion.div 
             initial={{ opacity: 0, x: 20 }} 
             animate={{ opacity: 1, x: 0 }} 
