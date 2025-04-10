@@ -16,7 +16,7 @@ app.whenReady().then(() => {
     width,
     height,
     frame: true,
-    webPreferences: { nodeIntegration: true, contextIsolation: false }
+    webPreferences: { nodeIntegration: true, contextIsolation: false, enableRemoteModule: true }
   })
 
   mainWindow.maximize()
